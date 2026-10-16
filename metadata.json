@@ -1,0 +1,6 @@
+{
+  "name": "Device Inspector",
+  "description": "A complete, high-fidelity hardware monitoring and system diagnostics utility for Android. Track CPU core utilization, memory, sensor outputs, battery health, and system parameters in real-time.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
