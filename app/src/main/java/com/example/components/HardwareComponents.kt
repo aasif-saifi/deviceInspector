@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,7 +56,7 @@ fun DashboardGauge(
     title: String,
     unit: String = "%",
     color: Color = MaterialTheme.colorScheme.primary,
-    size: Dp = 110.dp,
+    size: Dp = 76.dp,
     modifier: Modifier = Modifier
 ) {
     val animatedPercentage by animateFloatAsState(
@@ -66,20 +67,20 @@ fun DashboardGauge(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.width(size + 16.dp)
+        modifier = modifier
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.size(size)
         ) {
             Canvas(modifier = Modifier.fillMaxSize()) {
-                val strokeWidth = 10.dp.toPx()
+                val strokeWidth = 8.dp.toPx()
                 val center = Offset(size.toPx() / 2, size.toPx() / 2)
                 val radius = (size.toPx() - strokeWidth) / 2
 
                 // Track (Background circle)
                 drawCircle(
-                    color = color.copy(alpha = 0.1f),
+                    color = color.copy(alpha = 0.12f),
                     radius = radius,
                     center = center,
                     style = Stroke(width = strokeWidth)
@@ -102,25 +103,27 @@ fun DashboardGauge(
                     text = "${animatedPercentage.roundToInt()}",
                     style = MaterialTheme.typography.titleLarge.copy(
                         fontWeight = FontWeight.Bold,
-                        fontSize = 24.sp
+                        fontSize = 18.sp
                     ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 if (unit.isNotEmpty()) {
                     Text(
                         text = unit,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
                 }
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(6.dp))
         Text(
             text = title,
             style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -275,13 +278,16 @@ fun StatusIndicatorRow(
             Text(
                 text = label,
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
         }
+        Spacer(modifier = Modifier.width(8.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
-            modifier = Modifier.weight(1.2f)
+            modifier = Modifier.weight(1.3f)
         ) {
             Text(
                 text = value,
@@ -290,7 +296,11 @@ fun StatusIndicatorRow(
                     textAlign = TextAlign.End
                 ),
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(end = 4.dp)
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .padding(end = 4.dp),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
             Icon(
                 imageVector = Icons.Default.ContentCopy,

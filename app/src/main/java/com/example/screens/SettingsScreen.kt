@@ -62,40 +62,42 @@ fun SettingsScreen(
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
 
-                // Dark Mode Selector Row
-                Row(
+                // Dark Mode Selector
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(vertical = 8.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Brightness4, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Column {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text("Dark Theme Mode", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium))
                             Text("Adjust system drawing preference", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         }
                     }
-
-                    Row {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         FilterChip(
                             selected = darkMode == "SYSTEM",
                             onClick = { viewModel.updateDarkMode("SYSTEM") },
-                            label = { Text("Auto", fontSize = 12.sp) }
+                            label = { Text("Auto", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f)
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
                         FilterChip(
                             selected = darkMode == "DARK",
                             onClick = { viewModel.updateDarkMode("DARK") },
-                            label = { Text("Dark", fontSize = 12.sp) }
+                            label = { Text("Dark", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f)
                         )
-                        Spacer(modifier = Modifier.width(4.dp))
                         FilterChip(
                             selected = darkMode == "LIGHT",
                             onClick = { viewModel.updateDarkMode("LIGHT") },
-                            label = { Text("Light", fontSize = 12.sp) }
+                            label = { Text("Light", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -110,10 +112,13 @@ fun SettingsScreen(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
                         Icon(Icons.Default.Palette, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Column {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text("Material You Colors", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium))
                             Text("Enable dynamic system color syncing", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         }
@@ -136,33 +141,35 @@ fun SettingsScreen(
                 )
 
                 // Temperature Units
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(vertical = 8.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Thermostat, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Column {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text("Temperature Scale", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium))
                             Text("Select thermo gauge units", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         }
                     }
-
-                    Row {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         FilterChip(
                             selected = tempUnit == "CELSIUS",
                             onClick = { viewModel.updateTempUnit("CELSIUS") },
-                            label = { Text("Celsius (°C)", fontSize = 12.sp) }
+                            label = { Text("Celsius (°C)", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f)
                         )
-                        Spacer(modifier = Modifier.width(6.dp))
                         FilterChip(
                             selected = tempUnit == "FAHRENHEIT",
                             onClick = { viewModel.updateTempUnit("FAHRENHEIT") },
-                            label = { Text("Fahrenheit (°F)", fontSize = 12.sp) }
+                            label = { Text("Fahrenheit (°F)", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -170,33 +177,35 @@ fun SettingsScreen(
                 HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
 
                 // Frequency Units
-                Row(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(vertical = 8.dp)
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Speed, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
                         Spacer(modifier = Modifier.width(12.dp))
-                        Column {
+                        Column(modifier = Modifier.weight(1f)) {
                             Text("Processor Frequencies", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium))
                             Text("Select CPU telemetry units", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f))
                         }
                     }
-
-                    Row {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         FilterChip(
                             selected = freqUnit == "GHZ",
                             onClick = { viewModel.updateFreqUnit("GHZ") },
-                            label = { Text("GHz", fontSize = 12.sp) }
+                            label = { Text("GHz", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f)
                         )
-                        Spacer(modifier = Modifier.width(6.dp))
                         FilterChip(
                             selected = freqUnit == "MHZ",
                             onClick = { viewModel.updateFreqUnit("MHZ") },
-                            label = { Text("MHz", fontSize = 12.sp) }
+                            label = { Text("MHz", fontSize = 12.sp) },
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -296,6 +305,8 @@ fun SettingsScreen(
                     }
                 )
             }
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 

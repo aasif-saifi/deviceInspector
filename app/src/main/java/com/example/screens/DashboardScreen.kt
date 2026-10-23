@@ -20,6 +20,8 @@ import com.example.components.GlowCard
 import com.example.components.PulseLoadingShimmer
 import java.util.Locale
 
+import androidx.compose.ui.text.style.TextOverflow
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
@@ -68,22 +70,26 @@ fun DashboardScreen(
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceAround
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
                         DashboardGauge(
                             percentage = data.cpuUsagePercent.toFloat(),
                             title = "CPU",
-                            color = MaterialTheme.colorScheme.primary
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.weight(1f)
                         )
                         DashboardGauge(
                             percentage = data.ramUsagePercent.toFloat(),
                             title = "RAM",
-                            color = MaterialTheme.colorScheme.secondary
+                            color = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.weight(1f)
                         )
                         DashboardGauge(
                             percentage = data.storageUsagePercent.toFloat(),
                             title = "Storage",
-                            color = MaterialTheme.colorScheme.tertiary
+                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -125,9 +131,11 @@ fun DashboardScreen(
                             text = data.uptimeString,
                             style = MaterialTheme.typography.headlineMedium.copy(
                                 fontWeight = FontWeight.ExtraBold,
-                                fontSize = 20.sp
+                                fontSize = 18.sp
                             ),
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
                         )
                         Text(
                             text = "System Online",
@@ -199,6 +207,8 @@ fun DashboardScreen(
                         }
                     }
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }
@@ -218,13 +228,16 @@ private fun StatCardHeader(
         Text(
             text = title,
             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f, fill = false)
         )
         Icon(
             imageVector = icon,
             contentDescription = null,
             tint = tint,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(22.dp)
         )
     }
 }

@@ -128,6 +128,8 @@ fun DeviceScreen(
                     HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
                     StatusIndicatorRow(label = "USB Host Controller", value = if (dev.usbSupported) "Supported" else "No")
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }

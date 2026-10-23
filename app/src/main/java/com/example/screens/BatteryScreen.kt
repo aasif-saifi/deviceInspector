@@ -146,6 +146,8 @@ fun BatteryScreen(
                         value = "${bat.estimatedRemainingTimeMinutes} min"
                     )
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }

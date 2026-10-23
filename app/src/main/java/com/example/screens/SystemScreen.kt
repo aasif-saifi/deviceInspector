@@ -102,6 +102,8 @@ fun SystemScreen(
                     HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
                     StatusIndicatorRow(label = "Running Background Services", value = "${sys.runningServicesCount} Services")
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }

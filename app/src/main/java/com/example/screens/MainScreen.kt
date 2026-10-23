@@ -6,6 +6,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -21,20 +22,33 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import com.example.ui.theme.*
 
-sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
-    object Dashboard : Screen("dashboard", "Dashboard", Icons.Default.Dashboard)
-    object Cpu : Screen("cpu", "CPU", Icons.Default.Memory)
-    object Device : Screen("device", "Device", Icons.Default.PhoneAndroid)
-    object System : Screen("system", "System", Icons.Default.SettingsSystemDaydream)
-    object Battery : Screen("battery", "Battery", Icons.Default.BatteryChargingFull)
-    object Memory : Screen("memory", "Memory", Icons.Default.Storage)
-    object Sensors : Screen("sensors", "Sensors", Icons.Default.Sensors)
-    object Settings : Screen("settings", "Settings", Icons.Default.Settings)
+sealed class Screen(
+    val route: String,
+    val title: String,
+    val navLabel: String,
+    val icon: ImageVector
+) {
+    object Dashboard : Screen("dashboard", "Dashboard", "Dash", Icons.Default.Dashboard)
+    object Cpu : Screen("cpu", "CPU", "CPU", Icons.Default.Memory)
+    object Device : Screen("device", "Device", "Device", Icons.Default.PhoneAndroid)
+    object System : Screen("system", "System", "System", Icons.Default.SettingsSystemDaydream)
+    object Battery : Screen("battery", "Battery", "Battery", Icons.Default.BatteryChargingFull)
+    object Memory : Screen("memory", "Memory", "Memory", Icons.Default.Storage)
+    object Sensors : Screen("sensors", "Sensors", "Sensors", Icons.Default.Sensors)
+    object Settings : Screen("settings", "Settings", "Settings", Icons.Default.Settings)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -86,7 +100,7 @@ fun MainScreen(
                     if (currentRoute == Screen.Settings.route) {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"
                             )
                         }
@@ -150,47 +164,72 @@ fun MainScreen(
                 enter = slideInVertically(initialOffsetY = { it }),
                 exit = slideOutVertically(targetOffsetY = { it })
             ) {
-                NavigationBar(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    tonalElevation = 8.dp
+                Surface(
+                    color = MaterialTheme.colorScheme.background,
+                    tonalElevation = 8.dp,
+                    shadowElevation = 8.dp,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    navigationItems.forEach { screen ->
-                        val isSelected = currentRoute == screen.route
-                        NavigationBarItem(
-                            selected = isSelected,
-                            onClick = {
-                                if (currentRoute != screen.route) {
-                                    navController.navigate(screen.route) {
-                                        popUpTo(navController.graph.findStartDestination().id) {
-                                            saveState = true
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .windowInsetsPadding(NavigationBarDefaults.windowInsets)
+                            .height(68.dp)
+                            .padding(horizontal = 2.dp, vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        navigationItems.forEach { screen ->
+                            val isSelected = currentRoute == screen.route
+                            Column(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxHeight()
+                                    .clip(RoundedCornerShape(12.dp))
+                                    .clickable {
+                                        if (currentRoute != screen.route) {
+                                            navController.navigate(screen.route) {
+                                                popUpTo(navController.graph.findStartDestination().id) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
+                                            }
                                         }
-                                        launchSingleTop = true
-                                        restoreState = true
                                     }
+                                    .padding(vertical = 2.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .height(30.dp)
+                                        .width(42.dp)
+                                        .clip(RoundedCornerShape(15.dp))
+                                        .background(if (isSelected) SophisticatedSecondary else Color.Transparent),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = screen.icon,
+                                        contentDescription = screen.title,
+                                        tint = if (isSelected) SophisticatedHeaderTitleAccent else SophisticatedMutedText,
+                                        modifier = Modifier.size(20.dp)
+                                    )
                                 }
-                            },
-                            icon = {
-                                Icon(
-                                    imageVector = screen.icon,
-                                    contentDescription = screen.title
-                                )
-                            },
-                            label = {
+                                Spacer(modifier = Modifier.height(3.dp))
                                 Text(
-                                    text = screen.title,
-                                    fontSize = 10.sp,
-                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (isSelected) SophisticatedOnSurface else SophisticatedMutedText
+                                    text = screen.navLabel,
+                                    fontSize = 9.5.sp,
+                                    maxLines = 1,
+                                    softWrap = false,
+                                    overflow = TextOverflow.Ellipsis,
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                                    color = if (isSelected) SophisticatedOnSurface else SophisticatedMutedText,
+                                    modifier = Modifier.fillMaxWidth()
                                 )
-                            },
-                            colors = NavigationBarItemDefaults.colors(
-                                selectedIconColor = SophisticatedHeaderTitleAccent,
-                                unselectedIconColor = SophisticatedMutedText,
-                                indicatorColor = SophisticatedSecondary,
-                                selectedTextColor = SophisticatedOnSurface,
-                                unselectedTextColor = SophisticatedMutedText
-                            )
-                        )
+                            }
+                        }
                     }
                 }
             }
