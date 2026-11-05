@@ -254,15 +254,7 @@ fun StatusIndicatorRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
-                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText("Device Inspector", "$label: $value")
-                clipboard.setPrimaryClip(clip)
-                Toast
-                    .makeText(context, "Copied: $label", Toast.LENGTH_SHORT)
-                    .show()
-            }
-            .padding(vertical = 12.dp, horizontal = 4.dp),
+            .padding(vertical = 6.dp, horizontal = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -298,16 +290,30 @@ fun StatusIndicatorRow(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .weight(1f, fill = false)
-                    .padding(end = 4.dp),
+                    .padding(end = 2.dp),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
-            Icon(
-                imageVector = Icons.Default.ContentCopy,
-                contentDescription = "Copy Item",
-                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f),
-                modifier = Modifier.size(14.dp)
-            )
+            IconButton(
+                onClick = {
+                    val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText("Device Inspector", "$label: $value")
+                    clipboard.setPrimaryClip(clip)
+                    Toast
+                        .makeText(context, "Copied: $label", Toast.LENGTH_SHORT)
+                        .show()
+                },
+                modifier = Modifier
+                    .size(32.dp)
+                    .testTag("copy_button_${label.filter { it.isLetterOrDigit() }.lowercase()}")
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ContentCopy,
+                    contentDescription = "Copy $label",
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                    modifier = Modifier.size(16.dp)
+                )
+            }
         }
     }
 }
